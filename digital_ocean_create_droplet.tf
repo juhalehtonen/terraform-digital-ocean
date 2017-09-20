@@ -8,10 +8,12 @@ variable "create_domain" {
   description = "If set to true, create a domain and a CNAME record for this resource"
 }
 
+
 # Define provider
 provider "digitalocean" {
   token = "${var.digitalocean_token}"
 }
+
 
 # Define resource details
 # The web word is arbitrary, it serves the purpose of an identifier in this
@@ -23,7 +25,9 @@ resource "digitalocean_droplet" "web" {
   size   = "${var.droplet_size}"
 }
 
+
 # Create a new domain
+# NOTE: This & the record are not created if `create_domain` is `false`
 resource "digitalocean_domain" "web" {
     count = "${var.create_domain}"
     name = "${var.domain_name}"
@@ -31,6 +35,7 @@ resource "digitalocean_domain" "web" {
 }
 
 # Add a CNAME record to the domain
+# NOTE: This & the domain are not created if `create_domain` is `false`
 resource "digitalocean_record" "web" {
     count = "${var.create_domain}"
     domain = "${digitalocean_domain.web.name}"
@@ -38,6 +43,7 @@ resource "digitalocean_record" "web" {
     value =  "${digitalocean_domain.web.name}."
     name = "www"
 }
+
 
 # Define output variables to be displayed after creation
 output "Domain" {
