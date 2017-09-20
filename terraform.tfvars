@@ -1,4 +1,5 @@
 # Droplet variables
+# Docs: https://www.terraform.io/docs/providers/do/r/droplet.html
 droplet_name = "terraform-sample"
 droplet_image = "ubuntu-16-04-x64"
 droplet_region = "ams3"
