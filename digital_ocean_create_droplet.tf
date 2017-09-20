@@ -63,17 +63,19 @@ resource "digitalocean_floating_ip" "web_fip" {
 
 
 # Create a new domain
-# NOTE: This & the record are not created if `create_domain` is `false`
+# Create IF floating IP is created
 resource "digitalocean_domain" "domain_fip" {
-    count      = "${var.create_domain == 1 && var.create_floating_ip == 0 ? 1 : 0}"
+    count      = "${var.create_domain == 1 && var.create_floating_ip == 1 ? 1 : 0}"
     name       = "${var.domain_name}"
     ip_address = "${digitalocean_floating_ip.web_fip.ip_address}"
 }
+# Create IF load balancer is created BUT NOT load balancer
 resource "digitalocean_domain" "domain_lb" {
-    count      = "${var.create_domain == 1 && var.create_load_balancer == 1 ? 1 : 0}"
+    count      = "${var.create_domain == 1 && var.create_load_balancer == 1 && var.create_floating_ip == 0 ? 1 : 0}"
     name       = "${var.domain_name}"
     ip_address = "${digitalocean_loadbalancer.web_lb.ip}"
 }
+# Create IF neither load balancer NOR floating IP is created
 resource "digitalocean_domain" "domain" {
     count      = "${var.create_domain == 1 && var.create_load_balancer == 0 && var.create_floating_ip == 0 ? 1 : 0}"
     name       = "${var.domain_name}"
