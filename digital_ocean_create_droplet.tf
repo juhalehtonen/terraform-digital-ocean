@@ -55,7 +55,7 @@ resource "digitalocean_loadbalancer" "web_lb" {
 
 # Define Floating IP
 # NOTE: This is not created if `create_floating_ip` is `false`
-resource "digitalocean_floating_ip" "web" {
+resource "digitalocean_floating_ip" "web_fip" {
     count      = "${var.create_floating_ip}"
     droplet_id = "${digitalocean_droplet.web.0.id}"
     region     = "${digitalocean_droplet.web.0.region}"
@@ -64,26 +64,42 @@ resource "digitalocean_floating_ip" "web" {
 
 # Create a new domain
 # NOTE: This & the record are not created if `create_domain` is `false`
-resource "digitalocean_domain" "web" {
-    count      = "${var.create_domain}"
+resource "digitalocean_domain" "domain_fip" {
+    count      = "${var.create_domain == 1 && var.create_floating_ip == 0 ? 1 : 0}"
     name       = "${var.domain_name}"
-    ip_address = "${var.create_load_balancer ? digitalocean_loadbalancer.web_lb.ip : digitalocean_droplet.web.0.ipv4_address}"
+    ip_address = "${digitalocean_floating_ip.web_fip.ip_address}"
+}
+resource "digitalocean_domain" "domain_lb" {
+    count      = "${var.create_domain == 1 && var.create_load_balancer == 1 ? 1 : 0}"
+    name       = "${var.domain_name}"
+    ip_address = "${digitalocean_loadbalancer.web_lb.ip}"
+}
+resource "digitalocean_domain" "domain" {
+    count      = "${var.create_domain == 1 && var.create_load_balancer == 0 && var.create_floating_ip == 0 ? 1 : 0}"
+    name       = "${var.domain_name}"
+    ip_address = "${digitalocean_droplet.web.0.ipv4_address}"
 }
 
 # Add a CNAME record to the domain
 # NOTE: This & the domain are not created if `create_domain` is `false`
-resource "digitalocean_record" "web" {
+resource "digitalocean_record" "record" {
     count  = "${var.create_domain}"
-    domain = "${digitalocean_domain.web.name}"
+    domain = "${var.domain_name}"
     type   = "CNAME"
-    value  =  "${digitalocean_domain.web.name}."
+    value  =  "${var.domain_name}."
     name   = "www"
 }
 
 
 # Define output variables to be displayed after creation
-output "Domain" {
-    value = "${digitalocean_domain.web.id}"
+output "Domain_droplet" {
+    value = "${digitalocean_domain.domain.id}"
+}
+output "Domain_load_balancer" {
+    value = "${digitalocean_domain.domain_lb.id}"
+}
+output "Domain_floating_ip" {
+    value = "${digitalocean_domain.domain_fip.id}"
 }
 output "Droplet_name" {
     value = "${digitalocean_droplet.web.name}"
@@ -104,7 +120,7 @@ output "Price_monthly" {
     value = "${digitalocean_droplet.web.price_monthly}"
 }
 output "Floating_IP_address" {
-    value = "${digitalocean_floating_ip.web.ip_address}"
+    value = "${digitalocean_floating_ip.web_fip.ip_address}"
 }
 output "Load_balancer_IP" {
   value = "${digitalocean_loadbalancer.web_lb.ip}"
