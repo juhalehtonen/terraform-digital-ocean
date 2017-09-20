@@ -8,7 +8,7 @@ droplet_backups = false
 
 # Domain vars, No domain work is done if `create_domain` is `false`
 create_domain = false
-domain_name = "yourdomain.io"
+domain_name = "rocketjump.io"
 
 # Floating IP vars, no floating IP is created if `create_floating_ip` is `false`
 create_floating_ip = false

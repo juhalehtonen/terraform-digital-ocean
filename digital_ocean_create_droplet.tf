@@ -35,7 +35,7 @@ resource "digitalocean_droplet" "web" {
 }
 
 # Define load balancer
-resource "digitalocean_loadbalancer" "web" {
+resource "digitalocean_loadbalancer" "web_lb" {
     count  = "${var.create_load_balancer}"
     name   = "${var.droplet_name}-lb"
     region = "${var.droplet_region}"
@@ -57,8 +57,8 @@ resource "digitalocean_loadbalancer" "web" {
 # NOTE: This is not created if `create_floating_ip` is `false`
 resource "digitalocean_floating_ip" "web" {
     count      = "${var.create_floating_ip}"
-    droplet_id = "${digitalocean_droplet.web.id}"
-    region     = "${digitalocean_droplet.web.region}"
+    droplet_id = "${digitalocean_droplet.web.0.id}"
+    region     = "${digitalocean_droplet.web.0.region}"
 }
 
 
@@ -67,7 +67,7 @@ resource "digitalocean_floating_ip" "web" {
 resource "digitalocean_domain" "web" {
     count      = "${var.create_domain}"
     name       = "${var.domain_name}"
-    ip_address = "${digitalocean_droplet.web.ipv4_address}"
+    ip_address = "${var.create_load_balancer ? digitalocean_loadbalancer.web_lb.ip : digitalocean_droplet.web.0.ipv4_address}"
 }
 
 # Add a CNAME record to the domain
@@ -88,7 +88,7 @@ output "Domain" {
 output "Droplet_name" {
     value = "${digitalocean_droplet.web.name}"
 }
-output "IP" {
+output "Droplet_IP" {
     value = "${digitalocean_droplet.web.ipv4_address}"
 }
 output "Region" {
@@ -105,4 +105,10 @@ output "Price_monthly" {
 }
 output "Floating_IP_address" {
     value = "${digitalocean_floating_ip.web.ip_address}"
+}
+output "Load_balancer_IP" {
+  value = "${digitalocean_loadbalancer.web_lb.ip}"
+}
+output "Droplet_addresses" {
+  value = "${join(",", digitalocean_droplet.web.*.ipv4_address)}"
 }
