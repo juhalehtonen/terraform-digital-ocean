@@ -14,6 +14,7 @@ digitalocean_token=your_do_token
 8. Run `terraform plan` to see what will happen.
 9. Run `terraform apply` to apply the plan and create resources.
 10. You now have a running server in DigitalOcean.
+11. To update things, change things and things will change after re-applying
 
 ## Destroy changes
 1. Run `terraform plan --destroy` to see what will happen when you initiate destroy.
