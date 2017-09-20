@@ -9,10 +9,11 @@ variable "droplet_region" {}
 variable "droplet_size" {}
 variable "droplet_backups" {}
 
+variable "load_balancer_protocol" {}
+
 variable "create_domain" {}
 variable "create_floating_ip" {}
 variable "create_load_balancer" {}
-
 
 # Define provider
 provider "digitalocean" {
@@ -42,15 +43,17 @@ resource "digitalocean_loadbalancer" "web_lb" {
 
     forwarding_rule {
         entry_port     = 80
-        entry_protocol = "http"
+        entry_protocol = "${var.load_balancer_protocol}"
 
         target_port     = 80
-        target_protocol = "http"
+        target_protocol = "${var.load_balancer_protocol}"
     }
 
     healthcheck {
         port = 80
-        protocol = "http"
+        protocol = "${var.load_balancer_protocol}"
+        path = "/"
+        check_interval_seconds = 10
     }
 
     algorithm   = "round_robin"
