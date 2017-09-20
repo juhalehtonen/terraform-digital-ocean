@@ -4,6 +4,7 @@ variable "domain_name" {} // Comes from secrets.tfvars
 variable "droplet_name" {} // Comes from terraform.tfvars
 variable "droplet_region" {} // Comes from terraform.tfvars
 variable "droplet_size" {} // Comes from terraform.tfvars
+variable "droplet_backups" {} // Comes from terraform.tfvars
 variable "create_domain" {
   description = "If set to true, create a domain and a CNAME record for this resource"
 }
@@ -23,6 +24,7 @@ resource "digitalocean_droplet" "web" {
   name   = "${var.droplet_name}"
   region = "${var.droplet_region}"
   size   = "${var.droplet_size}"
+  backups = "${var.droplet_backups}"
 }
 
 
