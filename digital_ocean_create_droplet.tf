@@ -48,6 +48,11 @@ resource "digitalocean_loadbalancer" "web_lb" {
         target_protocol = "http"
     }
 
+    healthcheck {
+        port = 80
+        protocol = "http"
+    }
+
     algorithm   = "round_robin"
     droplet_ids = ["${digitalocean_droplet.web.*.id}"]
 }

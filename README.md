@@ -4,7 +4,7 @@ This basic Terraform setup allows easy creation of simple DigitalOcean servers, 
 ## Known issues
 - DigitalOcean does not currently support assigning Floating IPs to Load Balancers. As such, you cannot use both Load Balancers AND Floating IPs in a sane way yet.
 - Droplet monitoring will land in the next TF update, and is not yet added here.
-- Domains are attached to either Load balancer or a Droplet, but never to a Floating IP
+- Creating a record fails with 404 error, but subsequent apply works fine
 
 ## How to use
 1. Install Terraform (On OSX you can even just do `brew install terraform`)
