@@ -17,3 +17,6 @@ create_load_balancer = false
 load_balancer_protocol = "http"
 # Floating IP vars, no floating IP is created if `create_floating_ip` is `false`
 create_floating_ip = false
+
+# Bash scripts
+scripts_to_run = ["scripts/nginx.sh", "scripts/ufw.sh"]

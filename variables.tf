@@ -14,3 +14,7 @@ variable "load_balancer_protocol" {}
 variable "create_domain" {}
 variable "create_floating_ip" {}
 variable "create_load_balancer" {}
+
+variable "scripts_to_run" {
+    type = "list"
+}

@@ -19,7 +19,7 @@ resource "digitalocean_droplet" "web" {
     ssh_keys = [13209286] # Get with curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer your_do_api_token" "https://api.digitalocean.com/v2/account/keys"
 
     provisioner "remote-exec" {
-        script = "scripts/nginx.sh"
+        scripts = "${var.scripts_to_run}"
 
         connection {
             type     = "ssh"
