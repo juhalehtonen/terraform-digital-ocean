@@ -1,20 +1,3 @@
-# Define variables to be used
-variable "digitalocean_token" {}
-variable "domain_name" {}
-
-variable "droplet_name" {}
-variable "droplet_count" {}
-variable "droplet_image" {}
-variable "droplet_region" {}
-variable "droplet_size" {}
-variable "droplet_backups" {}
-
-variable "load_balancer_protocol" {}
-
-variable "create_domain" {}
-variable "create_floating_ip" {}
-variable "create_load_balancer" {}
-
 # Define provider
 provider "digitalocean" {
   token = "${var.digitalocean_token}"
@@ -25,14 +8,31 @@ provider "digitalocean" {
 # The web word is arbitrary, it serves the purpose of an identifier in this
 # declaration, as such, you can choose whatever name you’re most comfortable with.
 resource "digitalocean_droplet" "web" {
-    count   = "${var.droplet_count}"
-    image   = "${var.droplet_image}"
-    name    = "${var.droplet_name}-${count.index}"
-    region  = "${var.droplet_region}"
-    size    = "${var.droplet_size}"
-    backups = "${var.droplet_backups}"
-    ipv6    = "${var.create_floating_ip}" #Required for floating IP
+    count    = "${var.droplet_count}"
+    image    = "${var.droplet_image}"
+    name     = "${var.droplet_name}-${count.index}"
+    region   = "${var.droplet_region}"
+    size     = "${var.droplet_size}"
+    backups  = "${var.droplet_backups}"
+    ipv6     = "${var.create_floating_ip}" #Required for floating IP
     private_networking = "${var.create_floating_ip}" #Required for floating IP
+    ssh_keys = [13209286] # Get with curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer your_do_api_token" "https://api.digitalocean.com/v2/account/keys"
+
+    provisioner "remote-exec" {
+        inline = [
+            "export PATH=$PATH:/usr/bin",
+            "sudo apt-get update",
+            "sudo apt-get -y install nginx",
+        ]
+
+        connection {
+            type     = "ssh"
+            private_key = "${file("~/.ssh/id_juhukka")}"
+            user     = "root"
+            timeout  = "2m"
+        }
+    }
+
 }
 
 # Define load balancer
@@ -98,43 +98,4 @@ resource "digitalocean_record" "record" {
     type   = "CNAME"
     value  =  "${var.domain_name}."
     name   = "www"
-}
-
-
-# Define output variables to be displayed after creation
-output "Domain_droplet" {
-    value = "${digitalocean_domain.domain.id}"
-}
-output "Domain_load_balancer" {
-    value = "${digitalocean_domain.domain_lb.id}"
-}
-output "Domain_floating_ip" {
-    value = "${digitalocean_domain.domain_fip.id}"
-}
-output "Droplet_name" {
-    value = "${digitalocean_droplet.web.name}"
-}
-output "Droplet_IP" {
-    value = "${digitalocean_droplet.web.ipv4_address}"
-}
-output "Region" {
-    value = "${digitalocean_droplet.web.region}"
-}
-output "Status" {
-    value = "${digitalocean_droplet.web.status}"
-}
-output "Size" {
-    value = "${digitalocean_droplet.web.size}"
-}
-output "Price_monthly" {
-    value = "${digitalocean_droplet.web.price_monthly}"
-}
-output "Floating_IP_address" {
-    value = "${digitalocean_floating_ip.web_fip.ip_address}"
-}
-output "Load_balancer_IP" {
-  value = "${digitalocean_loadbalancer.web_lb.ip}"
-}
-output "Droplet_addresses" {
-  value = "${join(",", digitalocean_droplet.web.*.ipv4_address)}"
 }
