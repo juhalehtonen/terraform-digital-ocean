@@ -8,6 +8,9 @@ variable "droplet_backups" {}
 variable "create_domain" {
   description = "If set to true, create a domain and a CNAME record for this resource"
 }
+variable "create_floating_ip" {
+  description = "If set to true, create a floating IP associated with region & Droplet"
+}
 
 
 # Define provider
@@ -16,7 +19,7 @@ provider "digitalocean" {
 }
 
 
-# Define resource details
+# Define Droplet
 # The web word is arbitrary, it serves the purpose of an identifier in this
 # declaration, as such, you can choose whatever name you’re most comfortable with.
 resource "digitalocean_droplet" "web" {
@@ -25,6 +28,17 @@ resource "digitalocean_droplet" "web" {
     region  = "${var.droplet_region}"
     size    = "${var.droplet_size}"
     backups = "${var.droplet_backups}"
+    ipv6    = "${var.create_floating_ip}" #Required for floating IP
+    private_networking = "${var.create_floating_ip}" #Required for floating IP
+}
+
+
+# Define Floating IP
+# NOTE: This is not created if `create_floating_ip` is `false`
+resource "digitalocean_floating_ip" "web" {
+    count      = "${var.create_floating_ip}"
+    droplet_id = "${digitalocean_droplet.web.id}"
+    region     = "${digitalocean_droplet.web.region}"
 }
 
 
@@ -68,4 +82,7 @@ output "Size" {
 }
 output "Price_monthly" {
     value = "${digitalocean_droplet.web.price_monthly}"
+}
+output "Floating_IP_address" {
+    value = "${digitalocean_floating_ip.web.ip_address}"
 }
