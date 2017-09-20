@@ -1,16 +1,17 @@
 # Define variables to be used
 variable "digitalocean_token" {}
 variable "domain_name" {}
+
 variable "droplet_name" {}
+variable "droplet_count" {}
+variable "droplet_image" {}
 variable "droplet_region" {}
 variable "droplet_size" {}
 variable "droplet_backups" {}
-variable "create_domain" {
-  description = "If set to true, create a domain and a CNAME record for this resource"
-}
-variable "create_floating_ip" {
-  description = "If set to true, create a floating IP associated with region & Droplet"
-}
+
+variable "create_domain" {}
+variable "create_floating_ip" {}
+variable "create_load_balancer" {}
 
 
 # Define provider
@@ -23,13 +24,32 @@ provider "digitalocean" {
 # The web word is arbitrary, it serves the purpose of an identifier in this
 # declaration, as such, you can choose whatever name you’re most comfortable with.
 resource "digitalocean_droplet" "web" {
-    image   = "ubuntu-16-04-x64"
-    name    = "${var.droplet_name}"
+    count   = "${var.droplet_count}"
+    image   = "${var.droplet_image}"
+    name    = "${var.droplet_name}-${count.index}"
     region  = "${var.droplet_region}"
     size    = "${var.droplet_size}"
     backups = "${var.droplet_backups}"
     ipv6    = "${var.create_floating_ip}" #Required for floating IP
     private_networking = "${var.create_floating_ip}" #Required for floating IP
+}
+
+# Define load balancer
+resource "digitalocean_loadbalancer" "web" {
+    count  = "${var.create_load_balancer}"
+    name   = "${var.droplet_name}-lb"
+    region = "${var.droplet_region}"
+
+    forwarding_rule {
+        entry_port     = 80
+        entry_protocol = "http"
+
+        target_port     = 80
+        target_protocol = "http"
+    }
+
+    algorithm   = "round_robin"
+    droplet_ids = ["${digitalocean_droplet.web.*.id}"]
 }
 
 

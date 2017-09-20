@@ -5,10 +5,7 @@ This basic Terraform setup allows easy creation of simple DigitalOcean servers, 
 1. Install Terraform (On OSX you can even just do `brew install terraform`)
 2. The first command to run for a new configuration -- or after checking out an existing configuration from version control -- is `terraform init`, which initializes various local settings and data that will be used by subsequent commands.
 3. Create a personal DO API key with read/write access (https://cloud.digitalocean.com/settings/api/tokens)
-4. rename `secrets.tfvars.sample` to `secrets.tfvars` and add your DigitalOcean API token (*remember to .gitignore*):
-```
-digitalocean_token=your_do_token
-```
+4. rename `secrets.tfvars.sample` to `secrets.tfvars` and add your DigitalOcean API token (*remember to .gitignore*): `digitalocean_token=your_do_token`
 5. Fill in the variables located at `digital_ocean_create_droplet.tf`
 5. Validate the configuration with `terraform validate`. No output is good news.
 8. Run `terraform plan` to see what will happen.
