@@ -8,7 +8,6 @@
 # API
 variable "digitalocean_token" {
   description = "Your DigitalOcean API token with read/write permissions."
-  default = "YOUR_API_TOKEN"
 }
 
 # Domain

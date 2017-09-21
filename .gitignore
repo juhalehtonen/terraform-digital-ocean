@@ -8,4 +8,4 @@
 .terraform/
 
 # Ignore secrets (API keys etc)
-secrets.tfvars
+secrets.auto.tfvars
