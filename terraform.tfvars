@@ -19,4 +19,4 @@ load_balancer_protocol = "http"
 create_floating_ip = false
 
 # Bash scripts
-scripts_to_run = ["scripts/nginx.sh", "scripts/ufw.sh"]
+scripts_to_run = ["scripts/update.sh", "scripts/users.sh", "scripts/nginx.sh", "scripts/ufw.sh", "scripts/ssh.sh"]
