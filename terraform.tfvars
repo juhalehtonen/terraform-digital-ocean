@@ -1,3 +1,6 @@
+# This file contains all the variables you should typically need to adjust when deciding
+# what kind of setup you want to end up with. Read the comments here carefully.
+
 # Droplet variables
 # Docs: https://www.terraform.io/docs/providers/do/r/droplet.html
 droplet_name = "terraform-sample"

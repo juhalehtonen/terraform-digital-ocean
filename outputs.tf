@@ -1,28 +1,33 @@
 # Define output variables to be displayed after creation
+# Terraform does not output outputs that are not produced,
+# so one can safely include a bunch here and Terraform only
+# shows the relevant ones in the end.
 
 # Droplet(s)
+# Note that there can be X number of Droplets, so we need to join
+# the output values together to get a list of all of them.
 output "Droplet_addresses" {
-  value = "${join(",", digitalocean_droplet.web.*.ipv4_address)}"
+  value = "${join(", ", digitalocean_droplet.web.*.ipv4_address)}"
 }
 
 output "Droplet_names" {
-  value = "${join(",", digitalocean_droplet.web.*.name)}"
+  value = "${join(", ", digitalocean_droplet.web.*.name)}"
 }
 
 output "Droplet_sizes" {
-  value = "${join(",", digitalocean_droplet.web.*.size)}"
+  value = "${join(", ", digitalocean_droplet.web.*.size)}"
 }
 
 output "Droplet_regions" {
-  value = "${join(",", digitalocean_droplet.web.*.region)}"
+  value = "${join(", ", digitalocean_droplet.web.*.region)}"
 }
 
 output "Droplet_monthly_prices" {
-  value = "${join(",", digitalocean_droplet.web.*.price_monthly)}"
+  value = "${join(", ", digitalocean_droplet.web.*.price_monthly)}"
 }
 
 output "Droplet_statuses" {
-  value = "${join(",", digitalocean_droplet.web.*.status)}"
+  value = "${join(", ", digitalocean_droplet.web.*.status)}"
 }
 
 
