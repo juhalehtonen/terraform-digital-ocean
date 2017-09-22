@@ -9,7 +9,7 @@ droplet_backups = true
 
 # Domain vars, No domain work is done if `create_domain` is `false`
 create_domain = false
-domain_name = "yourdomain.io"
+domain_name = "domain.com"
 
 # NOTE: You cannot assign floating IPs to load balancers currently, no reason to create both now
 # Load Balancer vars, no load balancer is created if `create_load_balancer` is `false`
