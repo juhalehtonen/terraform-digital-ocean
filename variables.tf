@@ -8,7 +8,6 @@
 # API
 variable "digitalocean_token" {
   description = "Your DigitalOcean API token with read/write permissions."
-  default = "YOUR_API_TOKEN"
 }
 
 # Domain
@@ -67,5 +66,5 @@ variable "create_floating_ip" {
 variable "scripts_to_run" {
     type = "list"
     description = "List of bash scripts to run after servers are provisioned"
-    default = ["scripts/nginx.sh", "scripts/ufw.sh"]
+    default = ["scripts/update.sh", "scripts/users.sh", "scripts/nginx.sh", "scripts/ufw.sh", "scripts/ssh.sh"]
 }

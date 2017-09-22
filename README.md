@@ -7,7 +7,7 @@ A simple Terraform configuration setup to create a configurable number of Digita
 1. Install Terraform (On OSX you can just do `brew install terraform` if you trust Homebrew)
 2. The first command to run for a new configuration -- or after checking out an existing configuration from version control -- is `terraform init`, which initializes various local settings and data that will be used by subsequent commands.
 3. Create a personal DigitalOcean API key with read/write access (https://cloud.digitalocean.com/settings/api/tokens).
-4. Rename `secrets.tfvars.sample` to `secrets.tfvars` and add your DigitalOcean API token. Remember to .gitignore the file (ignored by this repo by default): `digitalocean_token=your_do_token`
+4. Rename `secrets.auto.tfvars.sample` to `secrets.auto.tfvars` and add your DigitalOcean API token. Remember to .gitignore the file (ignored by this repo by default): `digitalocean_token=your_do_token`
 5. Fill in the variables located at `terraform.tfvars` depending on what kind of setup you want.
 6. Add in your SSH key ID(s) to initiate the droplets with key-based authentication. You can get the list of IDs with `curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_DO_API_TOKEN" "https://api.digitalocean.com/v2/account/keys"`
 7. Validate the configuration with `terraform validate`. No output is good news.
