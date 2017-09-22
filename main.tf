@@ -31,6 +31,7 @@ resource "digitalocean_droplet" "web" {
 
 }
 
+
 # Define load balancer
 resource "digitalocean_loadbalancer" "web_lb" {
     count  = "${var.create_load_balancer}"
