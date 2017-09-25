@@ -11,14 +11,19 @@ droplet_count = 2
 droplet_backups = true
 
 # Domain vars, No domain work is done if `create_domain` is `false`
-create_domain = false
-domain_name = "domain.com"
+create_domain = true
+domain_name = "rocketjump.io"
+create_record = false
 
-# NOTE: You cannot assign floating IPs to load balancers currently, no reason to create both now
-# Load Balancer vars, no load balancer is created if `create_load_balancer` is `false`
+# NOTE: You cannot assign floating IPs to load balancers currently, no reason
+# to create both now
+
+# Load Balancer vars, no load balancer is created if `create_load_balancer`
+# is `false`
 create_load_balancer = true
 load_balancer_protocol = "http"
-# Floating IP vars, no floating IP is created if `create_floating_ip` is `false`
+# Floating IP vars, no floating IP is created if `create_floating_ip` is
+# `false`
 create_floating_ip = false
 
 # Bash scripts

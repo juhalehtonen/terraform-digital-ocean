@@ -90,7 +90,7 @@ resource "digitalocean_domain" "domain" {
 # Add a CNAME record to the domain
 # NOTE: This & the domain are not created if `create_domain` is `false`
 resource "digitalocean_record" "record" {
-    count  = "${var.create_domain}"
+    count  = "${var.create_record}"
     domain = "${var.domain_name}"
     type   = "CNAME"
     value  =  "${var.domain_name}."

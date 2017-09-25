@@ -19,6 +19,10 @@ variable "domain_name" {
   description = "Domain to configure, if desired."
   default = "domain.com"
 }
+variable "create_record" {
+  description = "Boolean whether or not to create a domain record"
+  default = false
+}
 
 # Droplets
 variable "droplet_name" {
